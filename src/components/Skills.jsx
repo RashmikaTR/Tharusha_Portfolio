@@ -4,20 +4,20 @@ import { motion } from 'framer-motion';
 const Skills = () => {
   const skillCategories = [
     {
-      title: 'Frontend',
-      skills: ['React', 'JavaScript (ES6+)', 'Tailwind CSS', 'Framer Motion', 'HTML5/CSS3']
+      title: 'Full-Stack',
+      skills: ['MERN Stack', 'React.js (v19) & Node.js', 'Express.js & MongoDB', 'Vanilla HTML, CSS, JS']
     },
     {
-      title: 'Backend',
-      skills: ['Node.js', 'Express', 'RESTful APIs', 'JWT Authentication', 'WebSockets']
+      title: 'Languages',
+      skills: ['Java', 'C#', 'C++', 'JavaScript / PHP']
     },
     {
-      title: 'DevOps & Tools',
-      skills: ['Docker', 'GitHub Actions', 'AWS (Basics)', 'Linux', 'Git/GitHub']
+      title: 'Tools & DevOps',
+      skills: ['Git Version Control', 'Docker', 'JWT Authentication', 'phpMyAdmin']
     },
     {
-      title: 'Databases',
-      skills: ['MongoDB', 'MySQL', 'PostgreSQL', 'Redis']
+      title: 'Professional',
+      skills: ['Problem-solving', 'Teamwork', 'Time management', 'Adaptability']
     }
   ];
 

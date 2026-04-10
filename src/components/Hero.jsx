@@ -17,16 +17,16 @@ const Hero = () => {
           transition={{ duration: 0.8 }}
         >
           <div className="inline-block px-4 py-1.5 mb-6 rounded-full glass border border-neonBlue/30 text-neonBlue font-mono text-sm">
-            status: online | ready for deployment
+            BSc IT Undergrad | Full-Stack Developer
           </div>
           <h1 className="text-5xl md:text-7xl font-display font-bold leading-tight mb-6 text-white">
-            Full Stack Builder <br />
+            Tharusha <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple">
-              DevOps Mindset
+              Rashmika
             </span>
           </h1>
           <p className="text-gray-400 text-lg mb-8 max-w-xl font-sans">
-            I design, build, and deploy scalable web applications. Transforming complex problems into elegant, efficient, and resilient systems.
+            Motivated IT undergraduate at the University of Vavuniya. I build functional web prototypes with a strong focus on clean, efficient code and MERN stack development.
           </p>
           
           <div className="flex flex-wrap gap-4">
@@ -63,7 +63,7 @@ const Hero = () => {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
             className="absolute -bottom-8 -left-8 px-4 py-2 glass rounded-lg text-xs font-mono text-neonBlue border border-neonBlue/20 hidden md:block"
           >
-            build: passing
+            vavuniya.edu: active
           </motion.div>
         </motion.div>
       </div>

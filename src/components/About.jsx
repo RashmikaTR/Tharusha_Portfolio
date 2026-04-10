@@ -1,23 +1,23 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Code, Server, GitBranch } from 'lucide-react';
+import { Code, BookOpen, GitBranch } from 'lucide-react';
 
 const About = () => {
   const features = [
     {
       icon: <Code className="w-8 h-8 text-neonBlue" />,
-      title: 'Full Stack Development',
-      description: 'Building responsive, accessible frontend interfaces and robust, scalable backend architectures.'
+      title: 'Full-Stack Development',
+      description: 'Specializing in MERN stack. Building functional, modern web and mobile prototypes.'
     },
     {
-      icon: <GitBranch className="w-8 h-8 text-neonPurple" />,
-      title: 'DevOps & CI/CD',
-      description: 'Streamlining deployment workflows, containerizing applications, and ensuring seamless delivery pipelines.'
+      icon: <BookOpen className="w-8 h-8 text-neonPurple" />,
+      title: 'IT Undergraduate',
+      description: 'Currently pursuing a BSc at the University of Vavuniya, focusing on Data Structures and Software Engineering.'
     },
     {
-      icon: <Server className="w-8 h-8 text-green-400" />,
-      title: 'System Architecture',
-      description: 'Designing systems with a focus on high availability, security, and performance.'
+      icon: <GitBranch className="w-8 h-8 text-green-400" />,
+      title: 'DevOps & Tooling',
+      description: 'Experienced in collaborative environments utilizing Git, Docker, and agile tools for clean and efficient delivery.'
     }
   ];
 
@@ -32,10 +32,10 @@ const About = () => {
           className="max-w-3xl mx-auto text-center mb-16"
         >
           <h2 className="text-4xl font-display font-bold mb-6">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple">&gt;</span> About Me
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-neonBlue to-neonPurple">&gt;</span> Summary
           </h2>
           <p className="text-gray-400 text-lg leading-relaxed">
-            I am a final-year IT undergraduate with a deep passion for solving complex problems. I consider myself a builder with a strong focus on real-world system implementations. With a foundation in both software development and system operations, I bridge the gap between code and deployment.
+            I am a motivated BSc IT undergraduate at the University of Vavuniya (Expected 2026). I have a strong foundation in MERN stack development and object-oriented languages like Java, C#, and C++. I thrive on building efficient web platforms, solving complex logic problems, and fostering excellent teamwork to contribute to innovative real-world projects.
           </p>
         </motion.div>
 

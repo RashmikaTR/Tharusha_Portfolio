@@ -20,7 +20,7 @@ function App() {
         <Contact />
       </main>
       <footer className="py-8 text-center border-t border-gray-800 text-gray-500 font-mono text-sm relative z-10 bg-black/50 backdrop-blur-sm">
-         <p>&copy; {new Date().getFullYear()} DevOps Builder. System fully operational.</p>
+         <p>&copy; {new Date().getFullYear()} Tharusha Rashmika. System fully operational.</p>
       </footer>
     </div>
   );

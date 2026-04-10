@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Send } from 'lucide-react';
+import { Mail, Send, MapPin } from 'lucide-react';
 import { FaGithub as GithubIcon, FaLinkedin as Linkedin } from 'react-icons/fa';
 
 const Contact = () => {
@@ -30,31 +30,31 @@ const Contact = () => {
             <div className="glass p-8 rounded-2xl border border-gray-800 h-full">
               <h3 className="text-2xl font-bold mb-8 text-white font-display">Contact Node</h3>
               <div className="flex flex-col gap-6">
-                <a href="mailto:dev@example.com" className="flex items-center gap-4 text-gray-300 hover:text-neonBlue transition-colors group">
+                <a href="mailto:tharusharashmika2001@gmail.com" className="flex items-center gap-4 text-gray-300 hover:text-neonBlue transition-colors group">
                   <div className="w-12 h-12 rounded-full bg-neonBlue/10 flex items-center justify-center group-hover:bg-neonBlue/20">
                     <Mail className="text-neonBlue" />
                   </div>
                   <div>
                      <p className="font-bold text-white">Email</p>
-                     <p className="font-mono text-sm">hello@antigravity.dev</p>
+                     <p className="font-mono text-sm leading-tight text-gray-400">tharusharashmika2001<br/>@gmail.com</p>
                   </div>
                 </a>
-                <a href="#" className="flex items-center gap-4 text-gray-300 hover:text-neonPurple transition-colors group">
+                <div className="flex items-center gap-4 text-gray-300 hover:text-neonPurple transition-colors group">
                   <div className="w-12 h-12 rounded-full bg-neonPurple/10 flex items-center justify-center group-hover:bg-neonPurple/20">
-                    <Linkedin className="text-neonPurple" />
+                    <MapPin className="text-neonPurple" />
                   </div>
                   <div>
-                     <p className="font-bold text-white">LinkedIn</p>
-                     <p className="font-mono text-sm">/in/devops-builder</p>
+                     <p className="font-bold text-white">Location</p>
+                     <p className="font-mono text-sm leading-tight text-gray-400">Pahala Ambawa,<br/>Kuliyapitiya, Sri Lanka</p>
                   </div>
-                </a>
+                </div>
                 <a href="#" className="flex items-center gap-4 text-gray-300 hover:text-white transition-colors group">
                   <div className="w-12 h-12 rounded-full bg-gray-800 flex items-center justify-center group-hover:bg-gray-700">
                     <GithubIcon className="text-white" />
                   </div>
                   <div>
                      <p className="font-bold text-white">GitHub</p>
-                     <p className="font-mono text-sm">github.com/devops-builder</p>
+                     <p className="font-mono text-sm leading-tight text-gray-400">Tharusha Rashmika</p>
                   </div>
                 </a>
               </div>

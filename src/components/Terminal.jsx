@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const Terminal = () => {
   const [history, setHistory] = useState([
-    { type: 'system', text: 'Welcome to Antigravity OS v1.0.0' },
+    { type: 'system', text: 'Tharusha_OS v1.0.0 (IT Undergraduate)' },
     { type: 'system', text: 'Type "help" for a list of available commands.' }
   ]);
   const [input, setInput] = useState('');
@@ -11,11 +11,11 @@ const Terminal = () => {
 
   const commandResponses = {
     help: 'Available commands: about, skills, projects, contact, clear, whoami',
-    about: 'I am a Full Stack Developer with a DevOps Mindset. Building scalable web applications.',
-    skills: 'Frontend: React, Tailwind\nBackend: Node.js, Express\nDevOps: Docker, GitHub Actions, AWS\nDatabases: MongoDB, MySQL',
-    projects: '1. Smart Hostel System\n2. CI/CD Pipeline App\n3. DevOps Monitoring',
-    contact: 'Email: dev@example.com | GitHub: github.com/devops-builder',
-    whoami: 'visitor',
+    about: 'Motivated BSc IT undergrad at the University of Vavuniya. Passionate about clean code and MERN stack development.',
+    skills: 'Tech: MERN Stack, Java, C#, C++, Git, Docker\nCore: Problem-solving, Adaptability, Teamwork',
+    projects: '1. Construction Management Dashboard (2026)\n2. Vavuniya University Connect - VUC (2026)\n3. AlumSphere (2025)',
+    contact: 'Email: tharusharashmika2001@gmail.com | Location: Kuliyapitiya, Sri Lanka',
+    whoami: 'guest_user',
   };
 
   useEffect(() => {
@@ -32,7 +32,7 @@ const Terminal = () => {
         return;
       }
       
-      const newHistory = [...history, { type: 'user', text: `visitor@portfolio:~$ ${cmd}` }];
+      const newHistory = [...history, { type: 'user', text: `guest@tharusha:~$ ${cmd}` }];
       
       if (cmd !== '') {
         if (commandResponses[cmd]) {
@@ -64,7 +64,7 @@ const Terminal = () => {
           <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
           <div className="w-3 h-3 bg-green-500 rounded-full"></div>
         </div>
-        <div className="mx-auto text-xs text-gray-500 font-sans">guest@antigravity-os:~</div>
+        <div className="mx-auto text-xs text-gray-500 font-sans">guest@tharusha-os:~</div>
       </div>
       <div className="p-4 h-64 overflow-y-auto" style={{ scrollbarWidth: 'thin', scrollbarColor: '#4B5563 transparent' }}>
         {history.map((line, i) => (
@@ -76,7 +76,7 @@ const Terminal = () => {
           </div>
         ))}
         <div className="flex">
-          <span className="text-neonBlue mr-2 whitespace-nowrap">visitor@portfolio:~$</span>
+          <span className="text-neonBlue mr-2 whitespace-nowrap">guest@tharusha:~$</span>
           <input
             type="text"
             value={input}
