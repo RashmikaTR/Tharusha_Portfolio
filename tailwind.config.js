@@ -8,27 +8,39 @@ export default {
   theme: {
     extend: {
       colors: {
-        darkBg: "#0d1117",
-        neonBlue: "#00f0ff",
-        neonPurple: "#bf00ff",
+        // Professional Mode (Clean Slate/Zinc)
+        professional: {
+          bg: '#ffffff',
+          text: '#09090b',
+          primary: '#18181b',
+          accent: '#3f3f46',
+          border: '#e4e4e7',
+        },
+        // Creative Mode (Vibrant Cyber/Space)
+        creative: {
+          bg: '#050505',
+          text: '#f4f4f5',
+          primary: '#8b5cf6', // Violet
+          accent: '#06b6d4', // Cyan
+          border: '#27272a',
+        },
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        display: ['Outfit', 'sans-serif'],
-        mono: ['Courier New', 'Courier', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
       },
       animation: {
+        'gradient-x': 'gradient-x 15s ease infinite',
         'float': 'float 6s ease-in-out infinite',
-        'pulse-glow': 'pulseGlow 2s infinite',
       },
       keyframes: {
-        float: {
-          '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-15px)' },
+        'gradient-x': {
+          '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
+          '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
         },
-        pulseGlow: {
-          '0%, 100%': { boxShadow: '0 0 10px #00f0ff' },
-          '50%': { boxShadow: '0 0 20px #00f0ff, 0 0 30px #bf00ff' },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0)' },
+          '50%': { transform: 'translateY(-20px)' },
         }
       }
     },
