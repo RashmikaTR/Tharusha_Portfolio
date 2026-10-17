@@ -1,29 +1,100 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Terminal as TerminalIcon, X, Minus, Maximize2, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Terminal as TerminalIcon, Sparkles, CornerDownLeft, Maximize2, Minimize2, Trash2 } from 'lucide-react';
 import { usePersonality } from '../PersonalityContext';
+import { sound } from '../utils/sound';
 
-const PROMPT = "tharusha@dev:~$ ";
+const ASCII_LOGO = `
+ ████████╗██████╗     ██████╗ ███████╗██╗   ██╗
+ ╚══██╔══╝██╔══██╗    ██╔══██╗██╔════╝██║   ██║
+    ██║   ██████╔╝    ██║  ██║█████╗  ██║   ██║
+    ██║   ██╔══██╗    ██║  ██║██╔══╝  ╚██╗ ██╔╝
+    ██║   ██║  ██║    ██████╔╝███████╗ ╚████╔╝ 
+    ╚═╝   ╚═╝  ╚═╝    ╚═════╝ ╚══════╝  ╚═══╝  
+`;
 
 const Terminal = () => {
-  const { mode, theme } = usePersonality();
+  const { mode, cycleMode } = usePersonality();
   const [input, setInput] = useState('');
-  const [history, setHistory] = useState([]);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [history, setHistory] = useState([
+    { type: 'system', content: 'TharushaOS v3.2.0-LTS (x86_64-pc-srilanka)' },
+    { type: 'system', content: 'Welcome! Type "help" or click quick chips below to explore.' },
+  ]);
   const [commandHistory, setCommandHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [isBooted, setIsBooted] = useState(false);
   const scrollRef = useRef(null);
   const inputRef = useRef(null);
 
   const commands = {
-    help: () => "Available commands: about, skills, projects, contact, clear, personality, date, whoami",
-    about: () => "I am Tharusha Rashmika, an IT Undergraduate at the University of Vavuniya. I build scalable digital ecosystems using the MERN stack and DevOps practices.",
-    skills: () => "Main: Java, C#, C++, JavaScript\nStack: MERN (MongoDB, Express, React, Node.js)\nTools: Git, Docker",
-    projects: () => "1. Alumni Management System - PHP/MySQL\n2. VUC - University Connect\n3. Project Management - Build Track Tool\nType 'project <name>' for more.",
-    contact: () => "Email: tharusharashmika2001@gmail.com\nLinkedIn: https://www.linkedin.com/in/tharusha-rashmika-4b0204345/\nGitHub: github.com/RashmikaTR",
-    date: () => new Date().toString(),
-    whoami: () => "guest@portfolio",
-    personality: () => `System running in [${mode.toUpperCase()}] mode. Visit the Navbar to toggle visually.`,
+    help: () => (
+      <div>
+        <p className="text-cyan-400 font-bold mb-1">Available System Commands:</p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-zinc-300">
+          <span>• <strong className="text-white">neofetch</strong> - System overview</span>
+          <span>• <strong className="text-white">about</strong> - Personal background</span>
+          <span>• <strong className="text-white">projects</strong> - Selected builds</span>
+          <span>• <strong className="text-white">skills</strong> - Engineering stack</span>
+          <span>• <strong className="text-white">contact</strong> - Reach out directly</span>
+          <span>• <strong className="text-white">mode</strong> - Toggle visuals</span>
+          <span>• <strong className="text-white">matrix</strong> - Digital rain code</span>
+          <span>• <strong className="text-white">clear</strong> - Reset screen</span>
+        </div>
+      </div>
+    ),
+    neofetch: () => (
+      <div className="flex flex-col sm:flex-row gap-4 items-start py-2">
+        <pre className="text-cyan-400 font-bold text-[10px] leading-tight hidden sm:block">
+          {ASCII_LOGO}
+        </pre>
+        <div className="space-y-1 text-xs text-zinc-300">
+          <p><span className="text-cyan-400 font-bold">user</span>@<span className="text-purple-400 font-bold">Tharusha-Rashmika</span></p>
+          <p className="text-zinc-600">----------------------------</p>
+          <p><strong className="text-white">Degree:</strong> BSc (Hons) in Information Technology</p>
+          <p><strong className="text-white">Institution:</strong> University of Vavuniya, Sri Lanka 🇱🇰</p>
+          <p><strong className="text-white">Location:</strong> Kuliyapitiya, North Western, LK</p>
+          <p><strong className="text-white">Primary Core:</strong> React 19, JavaScript (ESNext), Node, PHP, MySQL</p>
+          <p><strong className="text-white">Toolchain:</strong> Git, Docker, Linux, Tailwind, Three.js</p>
+          <p><strong className="text-white">Status:</strong> Open for Software Engineering Opportunities</p>
+        </div>
+      </div>
+    ),
+    about: () => (
+      <div className="space-y-1 text-zinc-300">
+        <p className="text-white font-bold">Tharusha Rashmika</p>
+        <p>BSc in Information Technology undergraduate at the University of Vavuniya, Sri Lanka.</p>
+        <p>Passionate about crafting high-performance, responsive full-stack applications with clean architecture and modern developer tooling.</p>
+      </div>
+    ),
+    skills: () => (
+      <div className="space-y-2 text-zinc-300">
+        <p><strong className="text-cyan-400">[Frontend]</strong> React, JavaScript (ES6+), Tailwind CSS, Bootstrap, HTML5/CSS3, Three.js</p>
+        <p><strong className="text-purple-400">[Backend]</strong> Node.js, Express.js, PHP, RESTful APIs, MVC Pattern</p>
+        <p><strong className="text-emerald-400">[Databases]</strong> MySQL, MongoDB, Database Modeling & Queries</p>
+        <p><strong className="text-amber-400">[DevOps/Tools]</strong> Git, GitHub, VS Code, Vercel, Docker basics, Linux</p>
+      </div>
+    ),
+    projects: () => (
+      <div className="space-y-2 text-zinc-300">
+        <p>1. <strong className="text-cyan-400">Tharusha Portfolio v2</strong> - React 19, Three.js, Tailwind CSS</p>
+        <p>2. <strong className="text-purple-400">SmartCart E-Commerce</strong> - JavaScript, Modern Web Platform</p>
+        <p>3. <strong className="text-emerald-400">Alumni Management System</strong> - PHP, MySQL Institutional Platform</p>
+        <p>4. <strong className="text-amber-400">Project Build Track</strong> - React Sprint & Build Tracker</p>
+        <p className="text-xs text-zinc-400 mt-1">Scroll down to the Projects section or click on "Simulate" on each card.</p>
+      </div>
+    ),
+    contact: () => (
+      <div className="space-y-1 text-zinc-300">
+        <p>• Email: <a href="mailto:tharusharashmika2001@gmail.com" className="text-cyan-400 underline">tharusharashmika2001@gmail.com</a></p>
+        <p>• LinkedIn: <a href="https://www.linkedin.com/in/tharusha-rashmika-4b0204345/" target="_blank" rel="noreferrer" className="text-cyan-400 underline">tharusha-rashmika</a></p>
+        <p>• GitHub: <a href="https://github.com/RashmikaTR" target="_blank" rel="noreferrer" className="text-cyan-400 underline">github.com/RashmikaTR</a></p>
+      </div>
+    ),
+    mode: () => {
+      cycleMode();
+      return "Palette cycled successfully.";
+    },
+    matrix: () => "Wake up, Neo... The Matrix has you. Follow the white rabbit. 🐇",
     clear: () => {
       setHistory([]);
       return null;
@@ -31,175 +102,167 @@ const Terminal = () => {
   };
 
   useEffect(() => {
-    if (isBooted) return;
-    const bootSequence = [
-      "Initializing kernel...",
-      "Loading TharushaOS v2.4.0...",
-      "Mounting file systems...",
-      "Connecting to neural-link via Portfolio-v5...",
-      "System Ready.",
-      "Type 'help' to begin."
-    ];
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < bootSequence.length) {
-        setHistory(prev => [...prev, { type: 'system', content: bootSequence[i] }]);
-        i++;
-      } else {
-        setIsBooted(true);
-        clearInterval(interval);
-      }
-    }, 400);
-    return () => clearInterval(interval);
-  }, [isBooted]);
-
-  useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [history]);
 
-  const handleCommand = (e) => {
+  const executeCommand = (cmdText) => {
+    const raw = cmdText.trim();
+    if (!raw) return;
+
+    sound.playClick();
+    const cmd = raw.toLowerCase();
+    const newEntry = { type: 'input', content: raw };
+
+    if (commands[cmd]) {
+      const output = commands[cmd]();
+      if (output !== null) {
+        setHistory((prev) => [...prev, newEntry, { type: 'output', content: output }]);
+      }
+    } else {
+      setHistory((prev) => [
+        ...prev,
+        newEntry,
+        { type: 'error', content: `command not found: "${raw}". Type "help" to see valid commands.` }
+      ]);
+    }
+
+    setCommandHistory((prev) => [raw, ...prev]);
+    setHistoryIndex(-1);
+    setInput('');
+  };
+
+  const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      const cmd = input.trim().toLowerCase();
-      if (!cmd) return;
-
-      const newHistory = [...history, { type: 'input', content: cmd }];
-
-      if (commands[cmd]) {
-        const result = commands[cmd]();
-        if (result !== null) {
-          newHistory.push({ type: 'output', content: result });
-        }
-      } else if (cmd.startsWith('project ')) {
-        const pName = cmd.split('project ')[1].toLowerCase();
-        const pDetails = {
-          'alumni': "Alumni Management System: A PHP/MySQL platform for university networking.",
-          'vuc': "VUC: A student collaboration hub for Vavuniya University.",
-          'management': "Project Management: A specialized build tracking tool built with React."
-        };
-        const detail = Object.keys(pDetails).find(k => pName.includes(k));
-        newHistory.push({ type: 'output', content: detail ? pDetails[detail] : `Project '${pName}' not found. Try: alumni, vuc, or management.` });
-      } else {
-        newHistory.push({ type: 'error', content: `Command not found: ${cmd}. Type 'help' for assistance.` });
+      executeCommand(input);
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (historyIndex + 1 < commandHistory.length) {
+        const nextIdx = historyIndex + 1;
+        setHistoryIndex(nextIdx);
+        setInput(commandHistory[nextIdx]);
       }
-
-      setHistory(newHistory);
-      setCommandHistory([input, ...commandHistory]);
-      setHistoryIndex(-1);
-      setInput('');
-    }
-
-    if (e.key === 'ArrowUp') {
-      const nextIndex = historyIndex + 1;
-      if (nextIndex < commandHistory.length) {
-        setHistoryIndex(nextIndex);
-        setInput(commandHistory[nextIndex]);
-      }
-    }
-
-    if (e.key === 'ArrowDown') {
-      const nextIndex = historyIndex - 1;
-      if (nextIndex >= 0) {
-        setHistoryIndex(nextIndex);
-        setInput(commandHistory[nextIndex]);
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      if (historyIndex - 1 >= 0) {
+        const nextIdx = historyIndex - 1;
+        setHistoryIndex(nextIdx);
+        setInput(commandHistory[nextIdx]);
       } else {
         setHistoryIndex(-1);
         setInput('');
       }
-    }
-
-    if (e.key === 'Tab') {
+    } else if (e.key === 'Tab') {
       e.preventDefault();
-      const matches = Object.keys(commands).filter(c => c.startsWith(input));
-      if (matches.length === 1) {
-        setInput(matches[0]);
-      }
+      const list = Object.keys(commands);
+      const match = list.find(c => c.startsWith(input.toLowerCase()));
+      if (match) setInput(match);
     }
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto my-12" id="terminal">
-      <div className="glass-dark rounded-xl border border-white/10 shadow-2xl overflow-hidden">
-        {/* Terminal Header */}
-        <div className="bg-white/10 px-4 py-2 flex items-center justify-between border-b border-white/5">
-          <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-red-500/50"></div>
-            <div className="w-3 h-3 rounded-full bg-yellow-500/50"></div>
-            <div className="w-3 h-3 rounded-full bg-green-500/50"></div>
+    <div className={`w-full transition-all duration-300 ${isExpanded ? 'max-w-6xl' : 'max-w-4xl'} mx-auto`}>
+      <div className="glass-card rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+        {/* Terminal Title Bar */}
+        <div className="bg-[#0b0d14] px-4 py-3 flex items-center justify-between border-b border-white/10 select-none">
+          <div className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block hover:opacity-100 cursor-pointer" onClick={() => setHistory([])} />
+            <span className="w-3 h-3 rounded-full bg-yellow-500/80 inline-block hover:opacity-100 cursor-pointer" onClick={() => executeCommand('clear')} />
+            <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block hover:opacity-100 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)} />
+            <span className="ml-3 text-xs font-mono text-zinc-400 flex items-center gap-1.5 font-semibold">
+              <TerminalIcon size={13} className="text-cyan-400" /> tharusha@macbook: ~ (zsh)
+            </span>
           </div>
-          <div className="flex items-center gap-2 opacity-30 text-xs font-mono">
-            <TerminalIcon size={12} />
-            <span>zsh — TharushaOS</span>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => {
+                sound.playClick();
+                setHistory([]);
+              }}
+              className="p-1 rounded text-zinc-500 hover:text-white hover:bg-white/5 transition-colors"
+              title="Clear terminal"
+            >
+              <Trash2 size={13} />
+            </button>
+            <button
+              onClick={() => {
+                sound.playClick();
+                setIsExpanded(!isExpanded);
+              }}
+              className="p-1 rounded text-zinc-500 hover:text-white hover:bg-white/5 transition-colors"
+              title={isExpanded ? 'Minimize' : 'Maximize'}
+            >
+              {isExpanded ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+            </button>
           </div>
-          <div className="w-12"></div>
         </div>
 
-        {/* Terminal Body */}
-        <div className="flex flex-col md:flex-row h-[400px]">
-          <div
-            className="flex-grow p-6 overflow-y-auto font-mono text-sm leading-relaxed"
-            onClick={() => inputRef.current?.focus()}
-            ref={scrollRef}
-          >
-            <AnimatePresence initial={false}>
-              {history.map((line, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className={`mb-1 ${line.type === 'input' ? 'text-white' : line.type === 'error' ? 'text-red-400' : 'text-emerald-400'}`}
-                >
-                  {line.type === 'input' && <span className="text-purple-400">{PROMPT}</span>}
-                  {line.content}
-                </motion.div>
-              ))}
-            </AnimatePresence>
+        {/* Terminal Screen */}
+        <div
+          ref={scrollRef}
+          onClick={() => inputRef.current?.focus()}
+          className="p-5 font-mono text-xs sm:text-sm bg-[#08090d]/95 overflow-y-auto min-h-[260px] max-h-[420px] space-y-3 cursor-text"
+        >
+          {history.map((item, idx) => (
+            <div key={idx} className="leading-relaxed">
+              {item.type === 'system' && (
+                <p className="text-zinc-500 italic"># {item.content}</p>
+              )}
+              {item.type === 'input' && (
+                <div className="flex items-center gap-2 text-cyan-300">
+                  <span className="text-purple-400 font-bold">tharusha@dev:~$</span>
+                  <span>{item.content}</span>
+                </div>
+              )}
+              {item.type === 'output' && (
+                <div className="text-zinc-200 mt-1 pl-4 border-l border-cyan-500/30">
+                  {item.content}
+                </div>
+              )}
+              {item.type === 'error' && (
+                <p className="text-red-400 pl-4 border-l border-red-500/30">{item.content}</p>
+              )}
+            </div>
+          ))}
 
-            {isBooted && (
-              <div className="flex items-center">
-                <span className="text-purple-400">{PROMPT}</span>
-                <input
-                  ref={inputRef}
-                  autoFocus
-                  className="bg-transparent border-none outline-none flex-grow text-white ml-1 caret-emerald-500"
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={handleCommand}
-                  spellCheck="false"
-                />
-              </div>
-            )}
+          {/* Active Input Line */}
+          <div className="flex items-center gap-2 text-cyan-300 pt-1">
+            <span className="text-purple-400 font-bold flex-shrink-0">tharusha@dev:~$</span>
+            <input
+              ref={inputRef}
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              className="w-full bg-transparent outline-none border-none text-zinc-100 font-mono text-xs sm:text-sm"
+              placeholder="Type command here (e.g. 'neofetch')..."
+              autoFocus
+            />
+          </div>
+        </div>
+
+        {/* Quick Action Chips Footer */}
+        <div className="bg-[#0b0d14] p-3 px-4 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider mr-1">Quick:</span>
+            {['neofetch', 'projects', 'skills', 'about', 'contact', 'clear'].map((cmd) => (
+              <button
+                key={cmd}
+                onClick={() => executeCommand(cmd)}
+                className="px-2.5 py-1 text-[11px] font-mono rounded-md bg-white/[0.04] hover:bg-cyan-500/20 text-zinc-300 hover:text-cyan-300 border border-white/5 hover:border-cyan-500/30 transition-all"
+              >
+                {cmd}
+              </button>
+            ))}
           </div>
 
-          {/* Quick Guide / Cheat Sheet */}
-          {isBooted && (
-            <div className="w-full md:w-48 bg-white/5 p-6 border-l border-white/5 hidden md:block select-none overflow-y-auto">
-              <h3 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-4">Command Guide</h3>
-              <div className="space-y-4">
-                {[
-                  { cmd: 'about', desc: 'Bio info' },
-                  { cmd: 'skills', desc: 'Tech stack' },
-                  { cmd: 'projects', desc: 'Work list' },
-                  { cmd: 'contact', desc: 'Socials' },
-                  { cmd: 'clear', desc: 'Reset' },
-                  { cmd: 'TAB', desc: 'Auto-complete', key: true },
-                ].map((item, id) => (
-                  <div key={id} className="group">
-                    <span className={`text-[11px] font-mono ${item.key ? 'text-purple-400' : 'text-emerald-500'} block mb-0.5`}>
-                      {item.cmd}
-                    </span>
-                    <p className="text-[9px] text-zinc-600 font-mono uppercase tracking-tighter">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          <span className="text-[10px] font-mono text-zinc-500 hidden sm:inline">
+            Press <kbd className="px-1.5 py-0.5 rounded bg-white/10 text-zinc-300">Tab</kbd> to complete
+          </span>
         </div>
       </div>
-      <p className="mt-4 text-[10px] text-center font-mono text-zinc-600 uppercase tracking-widest italic animate-pulse">
-        System active — Interaction encouraged
-      </p>
     </div>
   );
 };
