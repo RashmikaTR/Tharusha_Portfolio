@@ -4,16 +4,17 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Github, Mail, Linkedin, Instagram, Terminal as TerminalIcon, 
   ArrowUpRight, Download, Sparkles, Volume2, VolumeX, 
-  Compass, Code2, Layers, MapPin, Heart, ChevronUp, Cpu 
+  Compass, Code2, Layers, MapPin, Heart, ChevronUp, Cpu, CheckCircle2 
 } from 'lucide-react';
 import { sound } from './utils/sound';
 
 import profileImg from './assets/Tharusha Rashmika.png';
 
-// Lazy loaded components for lightning performance
+// Lazy loaded components for lightning-fast initial bundle & fluid interaction
 const CommandPalette = React.lazy(() => import('./components/CommandPalette'));
 const MiniStats = React.lazy(() => import('./components/MiniStats'));
 const Hero3D = React.lazy(() => import('./components/Hero3D'));
+const BentoGrid = React.lazy(() => import('./components/BentoGrid'));
 const SkillsDashboard = React.lazy(() => import('./components/SkillsDashboard'));
 const Timeline = React.lazy(() => import('./components/Timeline'));
 const ProjectCard = React.lazy(() => import('./components/ProjectCard'));
@@ -30,7 +31,6 @@ const Navbar = ({ onOpenCommand }) => {
 
   useEffect(() => {
     const updateTime = () => {
-      // Sri Lanka Time (UTC + 5:30)
       const options = { timeZone: 'Asia/Colombo', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
       setTime(new Intl.DateTimeFormat([], options).format(new Date()));
     };
@@ -50,14 +50,19 @@ const Navbar = ({ onOpenCommand }) => {
         <a 
           href="#hero" 
           onClick={() => sound.playClick()}
-          className="flex items-center gap-2 group"
+          className="flex items-center gap-2.5 group"
         >
-          <span className="w-8 h-8 rounded-lg bg-gradient-to-tr from-cyan-500 to-purple-600 flex items-center justify-center text-black font-black font-mono text-xs shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
-            TR
+          <span className="w-9 h-9 rounded-xl bg-gradient-to-tr from-cyan-400 via-purple-500 to-emerald-400 p-[1px] shadow-lg shadow-cyan-500/20 group-hover:scale-105 transition-transform">
+            <span className="w-full h-full bg-[#08090d] rounded-xl flex items-center justify-center text-cyan-300 font-mono font-black text-xs">
+              TR
+            </span>
           </span>
-          <span className="text-sm font-bold tracking-tight uppercase font-mono text-white group-hover:text-cyan-300 transition-colors hidden sm:inline">
-            Tharusha.dev
-          </span>
+          <div className="hidden sm:block">
+            <span className="text-sm font-bold tracking-tight uppercase font-mono text-white group-hover:text-cyan-300 transition-colors block leading-none">
+              Tharusha Rashmika
+            </span>
+            <span className="text-[10px] font-mono text-zinc-500 block">Full-Stack Engineer</span>
+          </div>
         </a>
       </motion.div>
 
@@ -66,13 +71,14 @@ const Navbar = ({ onOpenCommand }) => {
         initial={{ y: -30, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="glass-dark px-4 py-2 rounded-full flex items-center gap-3 md:gap-6 pointer-events-auto border border-white/10 shadow-2xl"
+        className="glass-dark px-3.5 sm:px-5 py-2 rounded-full flex items-center gap-2.5 md:gap-5 pointer-events-auto border border-white/10 shadow-2xl backdrop-blur-2xl"
       >
         <div className="hidden md:flex items-center gap-5 text-xs font-mono">
-          <a href="#about" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Journey</a>
           <a href="#projects" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Projects</a>
-          <a href="#skills" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Skills</a>
-          <a href="#terminal" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Terminal</a>
+          <a href="#skills" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Stack</a>
+          <a href="#snippets" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Lab</a>
+          <a href="#terminal" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Console</a>
+          <a href="#about" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Journey</a>
           <a href="#contact" onClick={() => sound.playClick()} className="text-zinc-400 hover:text-cyan-300 transition-colors">Contact</a>
         </div>
 
@@ -87,7 +93,7 @@ const Navbar = ({ onOpenCommand }) => {
         {/* Command Palette Trigger */}
         <button
           onClick={onOpenCommand}
-          className="flex items-center gap-1.5 text-[11px] font-mono text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-full border border-white/10 transition-colors"
+          className="flex items-center gap-1 text-[11px] font-mono text-zinc-300 hover:text-white bg-white/5 hover:bg-white/10 px-2.5 py-1 rounded-full border border-white/10 transition-colors"
           title="Open Command Hub (Ctrl+K)"
         >
           <Sparkles size={12} className="text-cyan-400" />
@@ -110,7 +116,7 @@ const Navbar = ({ onOpenCommand }) => {
         <button
           onClick={cycleMode}
           className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
-          title={`Cycle Color Palette (Active: ${mode})`}
+          title={`Cycle Theme Palette (Active: ${mode})`}
         >
           <TerminalIcon size={15} className="text-purple-400" />
         </button>
@@ -119,60 +125,72 @@ const Navbar = ({ onOpenCommand }) => {
   );
 };
 
-// Projects Grid with Filter Tabs
+// Projects Grid with Category Filters & Rich UI Visual Mockups
 const ProjectsGrid = ({ onSimulate }) => {
   const [filter, setFilter] = useState('all');
 
   const projects = [
     {
-      title: "Alumni Management System",
-      description: "An institutional web platform built with PHP and MySQL to manage alumni networks, user authentication, profile tracking, and academic record relations.",
-      tags: ["PHP", "MySQL", "MVC", "Apache", "UI/UX"],
-      category: "Full-Stack",
-      featured: true,
-      github: "https://github.com/RashmikaTR/Alumni-Management-System",
-      link: "#"
-    },
-    {
-      title: "SmartCart E-Commerce",
-      description: "Modern, responsive e-commerce web platform engineered with clean JavaScript, semantic HTML5, and CSS3. Includes cart management and dynamic product catalog.",
-      tags: ["JavaScript", "HTML5", "CSS3", "REST APIs", "E-Commerce"],
+      id: 'smartcart',
+      title: "SmartCart E-Commerce Platform",
+      mockupKey: "smartcart",
+      description: "A responsive consumer shopping experience built with clean JavaScript, HTML5, and CSS3. Features dynamic product filtering, cart drawer management, checkout calculation, and persistent storage.",
+      tags: ["JavaScript", "HTML5", "CSS3", "REST APIs", "E-Commerce", "UI/UX"],
       category: "Frontend",
       featured: true,
       github: "https://github.com/RashmikaTR/SmartCart-E-commerceWebsite",
       link: "#"
     },
     {
-      title: "Tharusha Portfolio 3D",
-      description: "A high-performance developer portfolio featuring an interactive terminal CLI, live GitHub stats, 3D particle engine, and real-time codebase simulations.",
-      tags: ["React 19", "Three.js", "Tailwind CSS", "Framer Motion"],
+      id: 'alumni',
+      title: "Alumni Management System",
+      mockupKey: "alumni",
+      description: "An enterprise institutional portal developed using PHP and MySQL. Connects university graduates with active students, featuring role-based authentication, student records search, and network directories.",
+      tags: ["PHP", "MySQL", "MVC Architecture", "Apache", "Relational DB"],
+      category: "Full-Stack",
+      featured: true,
+      github: "https://github.com/RashmikaTR/Alumni-Management-System",
+      link: "#"
+    },
+    {
+      id: 'portfolio',
+      title: "Tharusha 3D Spatial Portfolio",
+      mockupKey: "portfolio",
+      description: "An award-winning developer portfolio showcasing real-time WebGL spatial graphics, synthesized Web Audio haptics, an interactive terminal CLI, and live repository telemetry.",
+      tags: ["React 19", "Three.js", "Tailwind CSS", "Framer Motion", "R3F"],
       category: "Full-Stack",
       featured: true,
       github: "https://github.com/RashmikaTR/Tharusha_Portfolio",
       link: "https://tharusha-portfolio-dev.vercel.app"
     },
     {
-      title: "Project Build Track",
-      description: "A specialized tool for orchestrating software milestones, tracking continuous build progress, and visualizing team sprint delivery.",
-      tags: ["React", "JavaScript", "Tailwind CSS", "Dev Tools"],
+      id: 'buildtrack',
+      title: "Project Build Track Orchestrator",
+      mockupKey: "buildtrack",
+      description: "A developer sprint dashboard and build orchestrator designed to track continuous integration workflows, code reviews, and milestone delivery with instant visual status indicators.",
+      tags: ["React", "JavaScript", "Tailwind CSS", "Sprint Tools", "CI/CD"],
       category: "Frontend",
       featured: false,
       github: "https://github.com/RashmikaTR/Project_Build_Track",
       link: "#"
     },
     {
-      title: "Project Devfolio",
-      description: "A portfolio creation platform built to help students and developers showcase projects with responsive templates and interactive components.",
-      tags: ["JavaScript", "HTML5", "CSS3", "Tooling"],
+      id: 'devfolio',
+      title: "Project Devfolio Studio",
+      mockupKey: "devfolio",
+      description: "A portfolio builder application for software engineers. Allows rapid layout customization, interactive component previews, and automated deployment configurations.",
+      tags: ["JavaScript", "HTML5", "CSS3", "Template Engine"],
       category: "Frontend",
       featured: false,
       github: "https://github.com/RashmikaTR/Project_devfolio",
       link: "#"
     },
     {
-      title: "Operating Systems Engine (IT2244)",
-      description: "Core systems programming modules implementing scheduling algorithms, synchronization primitives, and memory management at University of Vavuniya.",
-      tags: ["C/C++", "Linux", "Processes", "Systems"],
+      id: 'systems',
+      title: "Operating Systems Practical Engine (IT2244)",
+      mockupKey: "systems",
+      description: "Low-level systems modules implementing round-robin CPU scheduling, semaphore synchronization, and virtual memory paging models completed at University of Vavuniya.",
+      tags: ["C / C++", "Linux", "POSIX", "Kernel Concepts", "Multithreading"],
       category: "Academic",
       featured: false,
       github: "https://github.com/RashmikaTR/Operating-Systems-IT2244-P-",
@@ -189,13 +207,13 @@ const ProjectsGrid = ({ onSimulate }) => {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
         <div>
           <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 font-bold mb-2 block">
-            Portfolio Showcase
+            Featured Projects & Systems
           </span>
           <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight text-white">
-            Selected Works & Systems
+            Visual Codebase Showcase
           </h2>
           <p className="text-zinc-400 text-sm font-sans mt-2 max-w-xl">
-            Real software projects spanning full-stack applications, interactive UI, and academic systems.
+            Each project features full UI previews, live architecture inspection, and direct links to code repositories.
           </p>
         </div>
 
@@ -208,22 +226,22 @@ const ProjectsGrid = ({ onSimulate }) => {
                 sound.playClick();
                 setFilter(category);
               }}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-mono transition-all capitalize ${
+              className={`px-4 py-2 rounded-full text-xs font-mono transition-all capitalize ${
                 filter === category
                   ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold shadow-[0_0_15px_rgba(6,182,212,0.2)]'
                   : 'bg-white/[0.04] text-zinc-400 hover:text-white border border-white/5 hover:border-white/10'
               }`}
             >
-              {category === 'all' ? 'All Projects' : category}
+              {category === 'all' ? 'All Systems' : category}
             </button>
           ))}
         </div>
       </div>
 
-      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <AnimatePresence>
-          {filteredProjects.map((p, i) => (
-            <ProjectCard key={p.title} {...p} onSimulate={() => onSimulate(p)} />
+          {filteredProjects.map((p) => (
+            <ProjectCard key={p.id} {...p} onSimulate={() => onSimulate(p)} />
           ))}
         </AnimatePresence>
       </motion.div>
@@ -256,7 +274,7 @@ export default function App() {
 
   return (
     <main
-      className={`min-h-screen bg-[#08090d] text-zinc-100 transition-colors duration-500 relative selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden ${antigravity ? 'animate-pulse-slow' : ''}`}
+      className={`min-h-screen bg-[#06070a] text-zinc-100 transition-colors duration-500 relative selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden ${antigravity ? 'animate-pulse-slow' : ''}`}
     >
       <Navbar onOpenCommand={() => setCommandPaletteOpen(true)} />
 
@@ -271,8 +289,8 @@ export default function App() {
         />
       </Suspense>
 
-      {/* Hero Section */}
-      <section id="hero" className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-28 pb-16 overflow-hidden">
+      {/* Cinematic Hero Section */}
+      <section id="hero" className="relative min-h-[90vh] flex flex-col items-center justify-center px-6 pt-32 pb-16 overflow-hidden">
         <Suspense fallback={<div className="absolute inset-0 bg-transparent" />}>
           <Hero3D mode={mode} />
         </Suspense>
@@ -350,7 +368,7 @@ export default function App() {
                 onClick={() => sound.playClick()}
                 className="px-6 py-3 rounded-full bg-gradient-to-r from-cyan-500 to-purple-600 hover:from-cyan-400 hover:to-purple-500 text-black font-bold font-mono text-xs uppercase tracking-wider flex items-center gap-2 shadow-lg shadow-cyan-500/25 hover:scale-105 active:scale-95 transition-all"
               >
-                <span>Explore Work</span>
+                <span>View Projects</span>
                 <ArrowUpRight size={15} />
               </a>
 
@@ -387,7 +405,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => sound.playClick()}
-                className="hover:text-white transition-colors"
+                className="hover:text-white transition-colors p-1"
                 title="GitHub Profile"
               >
                 <Github size={18} />
@@ -397,7 +415,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => sound.playClick()}
-                className="hover:text-cyan-400 transition-colors"
+                className="hover:text-cyan-400 transition-colors p-1"
                 title="LinkedIn Profile"
               >
                 <Linkedin size={18} />
@@ -405,7 +423,7 @@ export default function App() {
               <a
                 href="mailto:tharusharashmika2001@gmail.com"
                 onClick={() => sound.playClick()}
-                className="hover:text-purple-400 transition-colors"
+                className="hover:text-purple-400 transition-colors p-1"
                 title="Email Tharusha"
               >
                 <Mail size={18} />
@@ -415,7 +433,7 @@ export default function App() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => sound.playClick()}
-                className="hover:text-pink-400 transition-colors"
+                className="hover:text-pink-400 transition-colors p-1"
                 title="Instagram"
               >
                 <Instagram size={18} />
@@ -428,7 +446,22 @@ export default function App() {
       {/* Main Content Body */}
       <div className="max-w-7xl mx-auto px-6 overflow-hidden">
         <Suspense fallback={<div className="py-20 text-center opacity-40 font-mono text-xs">Loading Modular Architecture...</div>}>
-          {/* Terminal Console */}
+          
+          {/* 1. Bento Grid Core Showcase */}
+          <BentoGrid />
+
+          {/* 2. Visual Projects Grid with Live UI Mockup Previews */}
+          <ProjectsGrid onSimulate={setActiveSimulation} />
+
+          {/* 3. Skills & Engineering Matrix */}
+          <SkillsDashboard />
+
+          {/* 4. Code Snippet Lab */}
+          <div id="snippets">
+            <SnippetLab />
+          </div>
+
+          {/* 5. Terminal Console */}
           <section id="terminal" className="py-16">
             <div className="text-center mb-10">
               <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400 font-bold mb-2 block">
@@ -438,37 +471,28 @@ export default function App() {
                 Developer Console
               </h2>
               <p className="text-zinc-400 text-sm font-sans mt-2 max-w-xl mx-auto">
-                Explore my technical profile using familiar terminal syntax or instant one-click commands.
+                Explore my technical profile using terminal syntax or instant one-click commands.
               </p>
             </div>
             <Terminal />
           </section>
 
-          {/* Selected Projects */}
-          <ProjectsGrid onSimulate={setActiveSimulation} />
-
-          {/* Skills Dashboard */}
-          <SkillsDashboard />
-
-          {/* Snippet Lab (Unique Feature) */}
-          <SnippetLab />
-
-          {/* Engineering Pipeline / Workflow */}
+          {/* 6. Development Pipeline */}
           <Workflow />
 
-          {/* Academic & Journey Timeline */}
+          {/* 7. Academic Journey Timeline */}
           <Timeline />
 
-          {/* Contact Section */}
+          {/* 8. Contact Section */}
           <ContactSection />
         </Suspense>
       </div>
 
-      {/* Clean Footer */}
-      <footer className="py-12 border-t border-white/5 bg-[#06070a] text-center text-xs font-mono text-zinc-500">
+      {/* Clean Modern Footer */}
+      <footer className="py-12 border-t border-white/5 bg-[#050608] text-center text-xs font-mono text-zinc-500">
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="flex items-center justify-center gap-1.5">
-            Crafted with <Heart size={12} className="text-red-500 inline fill-red-500" /> by <strong className="text-white">Tharusha Rashmika</strong> • 2026
+            Designed & Engineered with <Heart size={12} className="text-red-500 inline fill-red-500" /> by <strong className="text-white">Tharusha Rashmika</strong> • 2026
           </p>
 
           <div className="flex items-center gap-4">
